@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000/api" : "/";
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5003/api" : "/";
 
 export const useAuthStore = create((set) => ({
 	authUser: null,

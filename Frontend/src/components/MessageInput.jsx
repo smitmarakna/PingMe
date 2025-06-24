@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Image, X, Send } from "lucide-react";
+import toast from "react-hot-toast";
 
 const MessageInput = () => {
 	const [text, setText] = useState("");
@@ -9,7 +10,7 @@ const MessageInput = () => {
 	const fileInputRef = useRef(null);
 	const { sendMessage } = useChatStore();
 
-  const handleImageChange = (e) => {
+	const handleImageChange = (e) => {
 		const file = e.target.files[0];
 		if (!file.type.startsWith("image/")) {
 			toast.error("Please select an image file");
@@ -21,32 +22,33 @@ const MessageInput = () => {
 			setImagePreview(reader.result);
 		};
 		reader.readAsDataURL(file);
-  };
+	};
 
-  const removeImagePreview = (e) => {
-    setImagePreview(null);
-    fileInputRef.current.value = null; // Clear the file input
-  };
+	const removeImagePreview = (e) => {
+		setImagePreview(null);
+		fileInputRef.current.value = null; // Clear the file input
+	};
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!text.trim() && !imagePreview) return;
+	const handleSendMessage = async (e) => {
+		e.preventDefault();
+		if (!text.trim() && !imagePreview) return;
 
-    try {
-      console.log("imagePreview", imagePreview);
-      await sendMessage({
-        text: text.trim(),
-        image: imagePreview,
-      });
+		try {
+			//   console.log("imagePreview", imagePreview);
+			await sendMessage({
+				text: text.trim(),
+				Image: imagePreview,
+			});
 
-      // Clear form
-      setText("");
-      setImagePreview(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (error) {
-      console.error("Failed to send message:", error);
-    }
-  };
+			// Clear form
+			setText("");
+			setImagePreview(null);
+			if (fileInputRef.current) fileInputRef.current.value = "";
+		} catch (error) {
+			console.error("Failed to send message:", error);
+			toast.error("Failed to send message");
+		}
+	};
 
 	return (
 		<div className="p-4 w-full">
